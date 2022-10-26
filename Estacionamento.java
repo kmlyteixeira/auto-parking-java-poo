@@ -104,10 +104,13 @@ public class Estacionamento {
             switch (tipo) {
                 case 1:
                     CadastrarCarro(sc);
+                    break;
                 case 2:
                     CadastrarMoto(sc);
+                    break;
                 case 3:
                     CadastrarBicicleta(sc);
+                    break;
                 default:
                     System.out.println("Opção inválida!");
                     break;
@@ -220,7 +223,7 @@ public class Estacionamento {
     }
 
     public static void ListarVeiculos(){
-        
+
     }
 
     public static void ListarVagas(){
