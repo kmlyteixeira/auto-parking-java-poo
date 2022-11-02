@@ -31,6 +31,10 @@ public class Bicicleta extends Veiculo {
         this.cor = cor;
     }
 
+    public static ArrayList<Bicicleta> getBicicletas() {
+        return bicicletas;
+    }
+
     @Override
     public String toString() {
         return super.toString() + 

@@ -77,6 +77,15 @@ public class Locacao implements GetId {
         Locacao.locacoes = locacoes;
     }
 
+    public static Locacao getLocacaoById(int id) throws Exception {
+        for (Locacao locacao : locacoes) {
+            if (locacao.getId() == id) {
+                return locacao;
+            }
+        }
+        throw new Exception("Locação não encontrada!");
+    }
+
     @Override
     public String toString() {
         return "Locacao: " + 

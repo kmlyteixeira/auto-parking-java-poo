@@ -31,6 +31,10 @@ public class Carro extends Veiculo {
         this.cor = cor;
     }
 
+    public static ArrayList<Carro> getCarros() {
+        return carros;
+    }
+
     @Override
     public String toString() {
         return " Carro: " + super.toString() + 

@@ -1,18 +1,19 @@
 import java.util.ArrayList;
 
-public class Vaga implements GetId {
+public class Vaga <T extends Veiculo> implements GetId {
     private int id;
     private String numero;
     private String tipo;
     private double preco;
     private double tamanho;
     private boolean ocupada;
+    private ArrayList<T> veiculos;
     private ArrayList<Locacao> locacoes;
 
     private static ArrayList<Vaga> vagas = new ArrayList<Vaga>();
 
     public Vaga(String numero, String tipo, double preco, double tamanho) {
-        this.id = GetId.getNextId(locacoes);
+        this.id = GetId.getNextId(vagas);
         this.numero = numero;
         this.tipo = tipo;
         this.preco = preco;
@@ -79,6 +80,10 @@ public class Vaga implements GetId {
         throw new Exception("Vaga não encontrada!");
     }
 
+    public ArrayList<T> getVeiculos() {
+        return veiculos;
+    }
+
     public ArrayList<Locacao> getLocacoes() {
         return locacoes;
     }
@@ -89,10 +94,11 @@ public class Vaga implements GetId {
 
     @Override
     public String toString() {
-        return " Vaga: " + numero + 
+        return " * VAGA: " + numero + 
             "\n Tipo: " + tipo + 
             "\n Preço: " + preco + 
             "\n Tamanho: " + tamanho + 
-            "\n Status: " + (ocupada == true ? "Ocupada" : "Livre");
+            "\n Status: " + (ocupada == true ? "Ocupada" : "Livre") +
+            "\n\n";
     }
 }

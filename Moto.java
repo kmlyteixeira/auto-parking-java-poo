@@ -31,6 +31,10 @@ public class Moto extends Veiculo {
         this.placa = placa;
     }
 
+    public static ArrayList<Moto> getMotos() {
+        return motos;
+    }
+
     @Override
     public String toString() {
         return " Moto: " + super.toString() + 
