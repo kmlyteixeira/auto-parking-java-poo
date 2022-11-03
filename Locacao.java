@@ -19,6 +19,7 @@ public class Locacao implements GetId {
         this.veiculo = veiculo;
 
         locacoes.add(this);
+        
     }
 
     public int getId() {
@@ -88,10 +89,10 @@ public class Locacao implements GetId {
 
     @Override
     public String toString() {
-        return "Locacao: " + 
-            "\n id: " + id + 
-            "\n data: " + data + 
-            "\n vaga: " + vaga + 
-            "\n veiculo: " + veiculo;
+        return "* LOCAÇÃO: " + 
+            "\n Id: " + id + 
+            "\n Data: " + data + 
+            "\n Vaga: " + vaga.getNumero() + " - Id: " + vaga.getId() +
+            "\n Veiculo: " + veiculo.getNome() + " - Id: " + veiculo.getId();
     }
 }

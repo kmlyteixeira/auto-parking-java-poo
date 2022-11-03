@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Vaga <T extends Veiculo> implements GetId {
+public class Vaga<T extends Veiculo> implements GetId, NumeroVaga {
     private int id;
     private String numero;
     private String tipo;
@@ -8,7 +8,6 @@ public class Vaga <T extends Veiculo> implements GetId {
     private double tamanho;
     private boolean ocupada;
     private ArrayList<T> veiculos;
-    private ArrayList<Locacao> locacoes;
 
     private static ArrayList<Vaga> vagas = new ArrayList<Vaga>();
 
@@ -21,6 +20,7 @@ public class Vaga <T extends Veiculo> implements GetId {
         this.ocupada = false;
 
         vagas.add(this);
+        NumeroVaga.numerosVagas.add(numero);
     }
 
     public int getId() {
@@ -84,21 +84,32 @@ public class Vaga <T extends Veiculo> implements GetId {
         return veiculos;
     }
 
-    public ArrayList<Locacao> getLocacoes() {
-        return locacoes;
-    }
-
     public static ArrayList<Vaga> getVagas() {
         return vagas;
     }
 
+    public double getPrecoTotal(int id) {
+        double precoTotal = 0;
+        for (Locacao locacao : Locacao.getLocacoes()) {
+            if (locacao.getVaga().getId() == id) {
+                precoTotal += locacao.getVaga().getPreco();
+            }
+        }
+
+        return precoTotal;
+    }
+
     @Override
     public String toString() {
-        return " * VAGA: " + numero + 
-            "\n Tipo: " + tipo + 
-            "\n Preço: " + preco + 
-            "\n Tamanho: " + tamanho + 
-            "\n Status: " + (ocupada == true ? "Ocupada" : "Livre") +
-            "\n\n";
+        return " * VAGA: " + numero +
+                "\n Tipo: " + tipo +
+                "\n Preço: " + preco +
+                "\n Tamanho: " + tamanho +
+                "\n Status: " + (ocupada == true ? "Ocupada" : "Livre");
+    }
+
+    @Override
+    public String getInput() {
+        return numero;
     }
 }

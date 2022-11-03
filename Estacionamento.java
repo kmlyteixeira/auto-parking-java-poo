@@ -79,7 +79,7 @@ public class Estacionamento {
                 case 0:
                     System.out.println("Saindo...");
                     break;
-            
+
                 default:
                     System.out.println("Opção inválida!");
                     break;
@@ -90,7 +90,7 @@ public class Estacionamento {
         sc.close();
     }
 
-    public static void DefinirTipo(Scanner sc){
+    public static void DefinirTipo(Scanner sc) throws Exception {
 
         int tipo = 0;
 
@@ -119,22 +119,30 @@ public class Estacionamento {
         } while (tipo != 1 && tipo != 2 && tipo != 3);
     }
 
-    public static void CadastrarCarro(Scanner sc){
-
+    public static void CadastrarCarro(Scanner sc) throws Exception {
         System.out.println("==== Cadastrar Carro ====");
         System.out.print("Digite o nome do carro: ");
         String nome = sc.next();
-        System.out.print("Digite a placa do carro: ");
-        String placa = sc.next();
         System.out.print("Digite a cor do carro: ");
         String cor = sc.next();
+        System.out.print("Digite a placa do carro: ");
+        String placa = sc.next();
+        boolean verifica = Placa.verificaExistencia(placa);
+        if (verifica == true) {
+            throw new Exception("Placa já cadastrada!");
+        }
+
+        boolean valida = Placa.isValida(placa);
+        if (valida == false) {
+            throw new Exception("Placa inválida! Formato AAA9999 deve ser respeitado!");
+        }
 
         new Carro(nome, placa, cor);
 
         System.out.println("Carro cadastrado com sucesso!");
     }
 
-    public static void CadastrarMoto(Scanner sc){
+    public static void CadastrarMoto(Scanner sc) throws Exception {
 
         System.out.println("==== Cadastrar Moto ====");
         System.out.print("Digite o nome do Moto: ");
@@ -143,13 +151,21 @@ public class Estacionamento {
         int cilindradas = sc.nextInt();
         System.out.print("Digite a placa da Moto: ");
         String placa = sc.next();
+        boolean verifica = Placa.verificaExistencia(placa);
+        if (verifica == true) {
+            throw new Exception("Placa já cadastrada!");
+        }
+        boolean valida = Placa.isValida(placa);
+        if (valida == false) {
+            throw new Exception("Placa inválida! Formato AAA9999 deve ser respeitado!");
+        }
 
         new Moto(nome, cilindradas, placa);
 
         System.out.println("Moto cadastrada com sucesso!");
     }
 
-    public static void CadastrarBicicleta(Scanner sc){
+    public static void CadastrarBicicleta(Scanner sc) {
 
         System.out.println("==== Cadastrar Bicicleta ====");
         System.out.print("Digite o nome da Bicicleta: ");
@@ -164,14 +180,22 @@ public class Estacionamento {
         System.out.println("Bicicleta cadastrada com sucesso!");
     }
 
-    public static void CadastrarVaga(Scanner sc) {
+    public static void CadastrarVaga(Scanner sc) throws Exception {
 
         String tipo = "";
         System.out.print("Digite o número da vaga: ");
         String numero = sc.next();
-        System.out.print("Digite o preço da vaga (siga o formato: 999,99): ");
+        boolean verifica = NumeroVaga.verificaExistencia(numero);
+        if (verifica == true) {
+            throw new Exception("Número de vaga já cadastrado!");
+        }
+        boolean valida = NumeroVaga.isValida(numero);
+        if (valida == false) {
+            throw new Exception("Número de vaga inválido! Formato: A999 deve ser respeitado.");
+        }
+        System.out.print("Digite o preço da vaga: ");
         double preco = sc.nextDouble();
-        System.out.print("Digite o tamanho (em metros quadrados. Ex: 45,00): ");
+        System.out.print("Digite o tamanho: ");
         double tamanho = sc.nextDouble();
         System.out.println("Digite o tipo da vaga: [C]arro, [M]oto, [B]icicleta");
         tipo = sc.next();
@@ -189,7 +213,7 @@ public class Estacionamento {
         System.out.println("Vaga cadastrada com sucesso!");
     }
 
-    public static void CadastrarLocacao(Scanner sc){
+    public static void CadastrarLocacao(Scanner sc) {
 
         System.out.println("Insira a data de locação: ");
         String data = sc.next();
@@ -199,38 +223,45 @@ public class Estacionamento {
             Veiculo veiculo = Veiculo.getVeiculoById(idVeiculo);
             System.out.println("Insira a vaga: ");
             int idVaga = sc.nextInt();
-            
+
+            Vaga<?> vaga = Vaga.getVagaById(idVaga);
+
+            if (vaga.isOcupada()) {
+                throw new Exception("Vaga ocupada!");
+            }
+
             if (veiculo instanceof Carro) {
-                Vaga<Carro> vaga = Vaga.getVagaById(idVaga);
-                if (vaga.isOcupada()) {
-                    throw new Exception("Vaga ocupada!");
-                } else {
+                if (vaga.getTipo().equalsIgnoreCase("C")) {
                     new Locacao(data, vaga, veiculo);
-                    System.out.println("Locação cadastrada com sucesso!");
+                    vaga.setOcupada(true);
+                    System.out.println("Locação realizada com sucesso!");
+                } else {
+                    throw new Exception("Veículo não compatível com a vaga!");
                 }
             } else if (veiculo instanceof Moto) {
-                Vaga<Moto> vaga = Vaga.getVagaById(idVaga);
-                if (vaga.isOcupada()) {
-                    throw new Exception("Vaga ocupada!");
-                } else {
+                if (vaga.getTipo().equalsIgnoreCase("M")) {
                     new Locacao(data, vaga, veiculo);
-                    System.out.println("Locação cadastrada com sucesso!");
+                    vaga.setOcupada(true);
+                    System.out.println("Locação realizada com sucesso!");
+                } else {
+                    throw new Exception("Veículo não compatível com a vaga!");
                 }
             } else if (veiculo instanceof Bicicleta) {
-                Vaga<Bicicleta> vaga = Vaga.getVagaById(idVaga);
-                if (vaga.isOcupada()) {
-                    throw new Exception("Vaga ocupada!");
-                } else {
+                if (vaga.getTipo().equalsIgnoreCase("B")) {
                     new Locacao(data, vaga, veiculo);
-                    System.out.println("Locação cadastrada com sucesso!");
+                    vaga.setOcupada(true);
+                    System.out.println("Locação realizada com sucesso!");
+                } else {
+                    throw new Exception("Veículo não compatível com a vaga!");
                 }
             }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void DesocuparVaga(Scanner sc){
+    public static void DesocuparVaga(Scanner sc) {
         System.out.println("Insira a vaga que será desocupada: ");
         int idVaga = sc.nextInt();
 
@@ -238,32 +269,35 @@ public class Estacionamento {
             Vaga vaga = Vaga.getVagaById(idVaga);
             if (!vaga.isOcupada()) {
                 throw new Exception("Vaga já está desocupada!");
+            } else {
+                vaga.setOcupada(false);
+                System.out.println("Vaga desocupada com sucesso!");
             }
-            vaga.setOcupada(false);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void ListarVeiculos(){
+    public static void ListarVeiculos() {
         for (Veiculo veiculo : Veiculo.getVeiculos()) {
             System.out.println(veiculo);
         }
     }
 
-    public static void ListarVagas(){
+    public static void ListarVagas() {
         for (Vaga vaga : Vaga.getVagas()) {
             System.out.println(vaga);
+            System.out.println(" Lucro Total da Vaga: " + vaga.getPrecoTotal(vaga.getId()) + "\n\n");
         }
     }
 
-    public static void ListarLocacoes(){
+    public static void ListarLocacoes() {
         for (Locacao locacao : Locacao.getLocacoes()) {
             System.out.println(locacao);
         }
     }
 
-    public static void DeletarVeiculo(Scanner sc){
+    public static void DeletarVeiculo(Scanner sc) {
         System.out.println("Insira o id do veículo que será deletado: ");
         int idVeiculo = sc.nextInt();
 
@@ -277,30 +311,34 @@ public class Estacionamento {
             } else if (veiculo instanceof Bicicleta) {
                 Bicicleta.getBicicletas().remove(veiculo);
             }
+
+            System.out.println("Veículo deletado com sucesso!");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void DeletarVaga(Scanner sc){
+    public static void DeletarVaga(Scanner sc) {
         System.out.println("Insira o id da vaga que será deletada: ");
         int idVaga = sc.nextInt();
 
         try {
             Vaga vaga = Vaga.getVagaById(idVaga);
             Vaga.getVagas().remove(vaga);
+            System.out.println("Vaga deletada com sucesso!");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void DeletarLocacao(Scanner sc){
+    public static void DeletarLocacao(Scanner sc) {
         System.out.println("Insira o id da locação que será deletada: ");
         int idLocacao = sc.nextInt();
 
         try {
             Locacao locacao = Locacao.getLocacaoById(idLocacao);
             Locacao.getLocacoes().remove(locacao);
+            System.out.println("Locação deletada com sucesso!");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

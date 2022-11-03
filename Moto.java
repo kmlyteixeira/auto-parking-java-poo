@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Moto extends Veiculo {
+public class Moto extends Veiculo implements Placa {
     private int cilindradas;
     private String placa;
 
@@ -40,5 +40,10 @@ public class Moto extends Veiculo {
         return " Moto: " + super.toString() + 
             "\n cilindradas: " + cilindradas + 
             "\n placa: " + placa;
+    }
+
+    @Override
+    public String getInput() {
+        return placa;
     }
 }
